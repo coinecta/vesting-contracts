@@ -54,6 +54,10 @@
       (
         index: "admin",
         transaction: "Lock"
+      ),
+      (
+        index: "admin",
+        transaction: "Reclaim"
       ))
   ),
   "vesting": (
