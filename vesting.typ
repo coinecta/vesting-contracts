@@ -28,6 +28,10 @@
   "7": (
     title: [The admin can remove unclaimed tokens after a certain time has passed.],
     description: [If any user does not claim their vesting NFT in time the admin can recover the unclaimed tokens, so they can be used for other purposes.]
+  ),
+  "8": (
+    title: [If a user claims tokens after initial release time has passed vested assets are released along with vesting NFT],
+    description: [If a user claims their vesting NFT after the initial release time has passed (#link(<HLR1>)[HLR1]) they will receive vested tokens following (#link(<HLR2>)[HLR2]) along with the vesting NFT. If all tokens are vested no vesting NFT is minted and the user receives all tokens.]
   )
 )
 
