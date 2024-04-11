@@ -40,28 +40,24 @@
     title: "Admin",
     description: "Admin (wallet) bootstrapping the protocol",
     interaction: ((
-      index: "allocation",
-      transaction: "Bootstrap"
+      index: "treasury",
+      transaction: "Spend: Bootstrap"
     ),)
   ),
-  "allocation": (
-    title: "Allocation",
-    description: "Allocation smart contract containing the allocation for a user",
+  "treasury": (
+    title: "Vesting Treasury",
+    description: "Allocation smart contract containing the allocation for all users in a merkle tree",
     interaction: ((
       index: "vesting",
-      transaction: "Lock"
+      transaction: "Spend: Claim"
       ),
       (
         index: "user",
-        transaction: "Lock"
+        transaction: "Spend: Claim"
       ),
       (
         index: "admin",
-        transaction: "Lock"
-      ),
-      (
-        index: "admin",
-        transaction: "Reclaim"
+        transaction: "Spend: Reclaim"
       ))
   ),
   "vesting": (
@@ -69,13 +65,28 @@
     description: "Vested contract holding unvested tokens for the user",
     interaction: ((
       index: "user",
-      transaction: "Vest"
+      transaction: "Spend: Vest"
     ),)
   ),
   "user": (
     title: "User",
     description: "User (wallet) interacting with the protocol",
     interaction: ()
+  ),
+  "linear_vest": (
+    title: "Linear Vesting",
+    description: "Contract controlling the correct settings for a linear vesting lock",
+    interaction: ((
+      index: "vesting",
+      transaction: "Redeem: Claim"
+    ),)),
+    "linear_vest_mint": (
+    title: "Vesting Mint Policy",
+    description: "Contract controlling the correct minting and burning of vesting nft's",
+    interaction: ((
+      index: "user",
+      transaction: "Mint: Claim"
+    ),))
   )
 )
 

@@ -49,5 +49,5 @@
 
 == Visual Protocol Overview
 
-#render("digraph protocol_overview {rankdir=LR " + actors.keys().map(index => index + " [label=\"" + actors.at(index).title + "\"] ").fold("",(a,b)=>a+b) + actors.keys().map(index => actors.at(index).interaction.map(i => " " + index + " -> " + i.index + " [label=\"" + i.transaction + "\"] ").fold("",(a,b)=>a+b)).fold("",(a,b)=>a+b) + "}")
+#render("digraph protocol_overview {size=\"7.75,10.25\"; " + actors.keys().map(index => index + " [label=\"" + actors.at(index).title + "\"] ").fold("",(a,b)=>a+b) + actors.keys().map(index => actors.at(index).interaction.map(i => " " + index + " -> " + i.index + " [label=\"" + i.transaction + "\"] ").fold("",(a,b)=>a+b)).fold("",(a,b)=>a+b) + "}")
 ]

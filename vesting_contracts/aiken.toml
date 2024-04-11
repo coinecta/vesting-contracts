@@ -1,0 +1,19 @@
+name = "coinecta/vesting_contracts"
+version = "0.0.0"
+license = "Apache-2.0"
+description = "Aiken contracts for project 'coinecta/vesting_contracts'"
+
+[repository]
+user = "coinecta"
+project = "vesting_contracts"
+platform = "github"
+
+[[dependencies]]
+name = "aiken-lang/stdlib"
+version = "1.8.0"
+source = "github"
+
+[[dependencies]]
+name = "SundaeSwap-finance/aicone"
+version = "a02ce943a2c76c0e683f327af8ad6f28d8b7cfd4"
+source = "github"
