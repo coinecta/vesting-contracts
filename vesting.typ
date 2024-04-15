@@ -78,10 +78,10 @@
     description: "Contract controlling the correct settings for a linear vesting lock",
     interaction: ((
       index: "vesting",
-      transaction: "Redeem: Claim"
+      transaction: "Withdrawal: Claim"
     ),)),
     "linear_vest_mint": (
-    title: "Vesting Mint Policy",
+    title: "Linear Vesting Mint Policy",
     description: "Contract controlling the correct minting and burning of vesting nft's",
     interaction: ((
       index: "user",

@@ -7,6 +7,7 @@ pub type ClaimEntry {
   claimant: MultisigScript,
   vesting_value: Value,
   direct_value: Value,
+  vesting_parameters: ByteArray,
 }
 
 pub fn serialise_entry(claim_entry: ClaimEntry) -> ByteArray {
