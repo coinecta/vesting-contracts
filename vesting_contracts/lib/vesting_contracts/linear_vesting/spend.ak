@@ -14,6 +14,7 @@ pub type LinearVestingParameters {
 }
 
 pub type LinearVestingDatum {
+  vesting_nft: ByteArray,
   vesting_parameters: LinearVestingParameters,
 }
 
@@ -31,9 +32,9 @@ pub fn spend(
 }
 
 fn vest(
-  output_reference: OutputReference,
-  datum: LinearVestingDatum,
-  ctx: ScriptContext,
+  _output_reference: OutputReference,
+  _datum: LinearVestingDatum,
+  _ctx: ScriptContext,
 ) -> Bool {
   True
 }
