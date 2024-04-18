@@ -1,12 +1,16 @@
+use aiken/cbor.{serialise}
 use aiken/hash.{Blake2b_224, Hash}
-use aiken/list.{filter_map, foldl}
+use aiken/list.{all, foldl, map}
 use aiken/transaction.{Output, ScriptContext, find_script_outputs}
 use aiken/transaction/credential.{
   Inline, Script, ScriptCredential, StakeCredential,
 }
-use aiken/transaction/value.{Value, flatten_with, from_asset, merge, zero}
+use aiken/transaction/value.{
+  Value, flatten_with, from_asset, from_lovelace, merge, negate, zero,
+}
 use vesting_contracts/datums.{extract_treasury_datum}
 use vesting_contracts/linear_vesting/mint.{Claim, LinearVestingMintRedeemer}
+use vesting_contracts/linear_vesting/spend.{extract_linear_vesting_datum}
 use vesting_contracts/merkle_tree_blake2b.{Proof, from_hash}
 use vesting_contracts/redeemers.{ClaimEntry}
 use vesting_contracts/treasury.{verify_claim}
@@ -38,20 +42,10 @@ fn claim(
   ctx: ScriptContext,
 ) -> Bool {
   expect [treasury_input] =
-    ctx.transaction.inputs
-      |> filter_map(
-          fn(input) {
-            if
-            input.output.address.payment_credential == ScriptCredential(
-              treasury_hash,
-            ){
-            
-              Some(input.output)
-            } else {
-              None
-            }
-          },
-        )
+    find_script_outputs(
+      map(ctx.transaction.inputs, fn(i) { i.output }),
+      treasury_hash,
+    )
   expect [treasury_output] =
     find_script_outputs(ctx.transaction.outputs, treasury_hash)
   let treasury_input_datum = extract_treasury_datum(treasury_input.datum)
@@ -68,12 +62,29 @@ fn claim(
       from_hash(treasury_input_datum.claimant_tree),
       from_hash(treasury_output_datum.claimant_tree),
     )?,
+    verify_vesting_parameters(
+      claim_entry.vesting_parameters,
+      linear_vesting_outputs,
+    )?,
     verify_vesting_value(
       claim_entry.vesting_value,
       linear_vesting_outputs,
       linear_vesting_hash,
     )?,
   }
+}
+
+fn verify_vesting_parameters(
+  vesting_parameters: ByteArray,
+  linear_vesting_outputs,
+) -> Bool {
+  linear_vesting_outputs
+    |> all(
+        fn(o) {
+          let linear_vesting_datum = extract_linear_vesting_datum(o.datum)
+          serialise(linear_vesting_datum.vesting_parameters) == vesting_parameters
+        },
+      )
 }
 
 fn verify_vesting_value(
@@ -98,7 +109,10 @@ fn verify_vesting_value(
                       }
                     },
                   )
-                |> foldl(zero(), fn(v, t) { merge(v, t) }),
+                |> foldl(
+                    negate(from_lovelace(2_000_000)),
+                    fn(v, t) { merge(v, t) },
+                  ),
             )
           },
         )

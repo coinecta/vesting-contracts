@@ -1,5 +1,5 @@
 use aiken/time.{PosixTime}
-use aiken/transaction.{OutputReference, ScriptContext}
+use aiken/transaction.{Datum, InlineDatum, OutputReference, ScriptContext}
 
 pub type LinearVestingSpendRedeemer {
   Vest
@@ -16,6 +16,12 @@ pub type LinearVestingParameters {
 pub type LinearVestingDatum {
   vesting_nft: ByteArray,
   vesting_parameters: LinearVestingParameters,
+}
+
+pub fn extract_linear_vesting_datum(datum: Datum) -> LinearVestingDatum {
+  expect InlineDatum(inline) = datum
+  expect linear_vesting_datum: LinearVestingDatum = inline
+  linear_vesting_datum
 }
 
 pub fn spend(
