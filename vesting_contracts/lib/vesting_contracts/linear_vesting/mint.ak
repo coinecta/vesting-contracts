@@ -1,17 +1,19 @@
 use aiken/transaction.{ScriptContext}
+use vesting_contracts/merkle_tree_blake2b.{Proof}
+use vesting_contracts/redeemers.{ClaimEntry}
 
 pub type LinearVestingMintRedeemer {
   Vest
   Split
   Combine
-  Claim
+  Claim { claim_proof: Proof<ClaimEntry>, claim_entry: ClaimEntry }
 }
 
-pub fn mint(redeemer: LinearVestingMintRedeemer, ctx: ScriptContext) -> Bool {
+pub fn mint(redeemer: LinearVestingMintRedeemer, _ctx: ScriptContext) -> Bool {
   when redeemer is {
     Vest -> True
     Split -> True
     Combine -> True
-    Claim -> True
+    Claim(_, _) -> True
   }
 }
