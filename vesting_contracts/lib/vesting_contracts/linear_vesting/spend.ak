@@ -21,6 +21,7 @@ pub type LinearVestingParameters {
 }
 
 pub type LinearVestingDatum {
+  vesting_nft: ByteArray,
   vesting_parameters: LinearVestingParameters,
 }
 
@@ -53,4 +54,10 @@ fn vest(output_reference: OutputReference, ctx: ScriptContext) -> Bool {
   expect Some(input) = find_input(ctx.transaction.inputs, output_reference)
   expect Address(ScriptCredential(vesting_hash), _) = input.output.address
   verify_vesting_program(vesting_hash, ctx.transaction)
+fn vest(
+  _output_reference: OutputReference,
+  _datum: LinearVestingDatum,
+  _ctx: ScriptContext,
+) -> Bool {
+  True
 }
