@@ -11,7 +11,10 @@ validator {
   ) -> Bool {
     when ctx.purpose is {
       Spend(output_reference) ->
-        when redeemer.tx_type is {
+        //Two tx types:
+        //Claim: a user claims their value according to their claim as stored in the merkle tree
+        //Reclaim: Treasury creator reclaims any remaining tokens
+        when redeemer is {
           Claim(claim_proof, claim_entry) ->
             claim(output_reference, claim_proof, claim_entry, ctx.transaction)
           Reclaim -> reclaim(datum, ctx.transaction)

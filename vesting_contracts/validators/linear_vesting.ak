@@ -9,22 +9,23 @@ use vesting_contracts/linear_vesting/withdrawal.{withdraw}
 
 validator(treasury_hash: Hash<Blake2b_224, Script>) {
   fn linear_spend(
-    datum: LinearVestingDatum,
+    _datum: LinearVestingDatum,
     redeemer: LinearVestingSpendRedeemer,
     ctx: ScriptContext,
   ) -> Bool {
     when ctx.purpose is {
-      Spend(output_reference) -> spend(output_reference, datum, redeemer, ctx)
+      Spend(output_reference) -> spend(output_reference, redeemer, ctx)
       _ -> False
     }
   }
 
+  //Both mint and withdrawfrom is covered by this validator (only 2 functions supported per validator)
   fn linear_mint(
     redeemer: LinearVestingMintRedeemer,
     ctx: ScriptContext,
   ) -> Bool {
     when ctx.purpose is {
-      Mint(_) -> mint(redeemer, ctx)
+      Mint(policy_id) -> mint(policy_id, treasury_hash, redeemer, ctx)
       WithdrawFrom(stake_credential) ->
         withdraw(stake_credential, treasury_hash, redeemer, ctx)
       _ -> False
